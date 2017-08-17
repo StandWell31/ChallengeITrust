@@ -1,0 +1,8 @@
+########################################### Sources & Docs usefull #################################################
+
+
+Linux best pratices : http://kvz.io/blog/2013/11/21/bash-best-practices/
+Parse CSV : https://www.developpez.net/forums/d383700/systemes/linux/shell-commandes-gnu/bash-utilisation-cat-awk-parser-fichier-csv/
+Remote SSH : https://stackoverflow.com/questions/13928116/write-a-shell-script-to-ssh-to-a-remote-machine-and-execute-commands
+Patch ssl.patch : http://geekeries.de-labrusse.fr/?p=2537
+Sorties erreurs : http://putaindecode.io/fr/articles/shell/redirections/
