@@ -7,8 +7,10 @@ set -o nounset
 
 # On definit dans quel fichier seront enregistrées les erreurs
 
-if [ -f "monfichier.log"];
-        then rm "monfichier.log";
+file="monfichier.log"
+
+if [ -f $file ] ;
+        then rm $file
 fi
 
 exec 4>&2     # sauvegarder stderr
