@@ -19,7 +19,10 @@ exec 2>>monfichier.log     #rediriger stderr vers le fichier
 ############################ Script #############################
 #################################################################
 
-grep -vi windows ips.csv > ips_sans_windows.csv
+grep -vi windows ips.csv | tr -d '"' > ips_sans_windows.csv
+#rm ips.csv
+cut -d',' -f1 ips_sans_windows.csv > ips_only.csv
+
 
 
 #################################################################
