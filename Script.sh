@@ -16,9 +16,14 @@ fi
 exec 4>&2     # sauvegarder stderr
 exec 2>>monfichier.log     #rediriger stderr vers le fichier
 
-echo test
-rm test2
-echo toto
+############################ Script #############################
+#################################################################
+
+grep -vi windows ips.csv > ips_sans_windows.csv
+
+
+#################################################################
+########################## End Script ###########################
 
 exec 2>&4 # restaurer la valeur de stderr
 exec 4>&- # fermer le FD 4
