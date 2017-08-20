@@ -1,4 +1,4 @@
-#!/bin/bash
+!/bin/bash
 
 # On stoppe l'execution du script si on accede a une variable unset
 set -o nounset
@@ -19,15 +19,21 @@ exec 2>>monfichier.log     #rediriger stderr vers le fichier
 ############################ Script #############################
 #################################################################
 
-grep -vi windows ips.csv | tr -d '"' > ips_sans_windows.csv
+grep -vi windows ipsTest.csv | tr -d '"' > ips_sans_windows.csv #Modif Test ici
 #rm ips.csv
 cut -d',' -f1 ips_sans_windows.csv > ips_only.csv
 
-USERNAME=xavier
-HOSTS="192.168.21.130"
-SCRIPT="touch test"
-for HOSTNAME in ${HOSTS} ; do
-        sshpass -p "root" ssh -o StrictHostKeyChecking=no  -l ${USERNAME} ${HOSTNAME} "${SCRIPT}"
+for ip in $"{ips_only.csv[*]}"
+        do
+                HOSTS=192.168.21.133 ############################# PROBLEME ICI PAS DE RECUP VAR DU TAB #############################################
+
+                USERNAME=xavier
+                SCRIPT="touch test"
+
+                for HOSTNAME in ${HOSTS} ;
+                        do
+                                sshpass -p "root" ssh -o StrictHostKeyChecking=no  -l ${USERNAME} ${HOSTNAME} "${SCRIPT}"
+                done
 done
 
 rm ips_sans_windows.csv ips_only.csv
