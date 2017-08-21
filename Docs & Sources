@@ -7,3 +7,4 @@ Remote SSH : https://stackoverflow.com/questions/13928116/write-a-shell-script-t
 Patch ssl.patch : http://geekeries.de-labrusse.fr/?p=2537
 Sorties erreurs : http://putaindecode.io/fr/articles/shell/redirections/
 Envoie de fichiers par ssh : https://openclassrooms.com/courses/reprenez-le-controle-a-l-aide-de-linux/transferer-des-fichiers
+Envoie de plusieurs commandes via ssh : https://thornelabs.net/2013/08/21/simple-ways-to-send-multiple-line-commands-over-ssh.html
