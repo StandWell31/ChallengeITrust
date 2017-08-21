@@ -1,4 +1,5 @@
-!/bin/bash
+#!/bin/bash
+
 
 # On stoppe l'execution du script si on accede a une variable unset
 set -o nounset
@@ -7,36 +8,33 @@ set -o nounset
 
 # On definit dans quel fichier seront enregistrées les erreurs
 
-file="monfichier.log"
+file="errors.log"
 
-if [ -f $file ] ;
-        then rm $file
+if [ -f $file ]
+then
+        rm $file
 fi
 
 exec 4>&2     # sauvegarder stderr
-exec 2>>monfichier.log     #rediriger stderr vers le fichier
+exec 2>>errors.log     #rediriger stderr vers le fichier
 
 ############################ Script #############################
 #################################################################
 
-grep -vi windows ipsTest.csv | tr -d '"' > ips_sans_windows.csv #Modif Test ici
-#rm ips.csv
-cut -d',' -f1 ips_sans_windows.csv > ips_only.csv
+while read line
+do
+        # On supprime les host windows
+        tmp=$(echo $line | grep -vi "windows")
+        # On filtre les IPs
+        result=$(echo $tmp | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}')
 
-for ip in $"{ips_only.csv[*]}"
-        do
-                HOSTS=192.168.21.133 ############################# PROBLEME ICI PAS DE RECUP VAR DU TAB #############################################
-
-                USERNAME=xavier
-                SCRIPT="touch test"
-
-                for HOSTNAME in ${HOSTS} ;
-                        do
-                                sshpass -p "root" ssh -o StrictHostKeyChecking=no  -l ${USERNAME} ${HOSTNAME} "${SCRIPT}"
-                done
-done
-
-rm ips_sans_windows.csv ips_only.csv
+        ssh -t xavier@${result} bash -c "'
+        sudo su
+        apt-get update && apt-get upgrade -y
+        apt-get install python-openssl
+        '"
+        echo -e "${result}\n"
+done < $1
 
 
 #################################################################
