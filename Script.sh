@@ -8,9 +8,9 @@ set -o nounset
 
 # On definit dans quel fichier seront enregistrées les erreurs
 
-file="errors.log"
+file="errors.log" #Fichier de logs
 
-if [ -f $file ]
+if [ -f $file ] #Si le fichier existe déjà, on le supprime
 then
         rm $file
 fi
@@ -21,23 +21,25 @@ exec 2>>errors.log     #rediriger stderr vers le fichier
 ############################ Script #############################
 #################################################################
 
-while read line
+while read line #Boucle qui lit le tableau ligne par ligne
 do
         # On supprime les host windows
         tmp=$(echo $line | grep -vi "windows")
         # On filtre les IPs
         result=$(echo $tmp | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}')
 
-        ssh -t xavier@${result} bash -c "'
-        touch test
-        scp ssl.patch xavier@${result}:/home/xavier
-        sudo su
+        ssh -t xavier@${result} bash -c "' #On se connecte par ssh à chaque ip dans la variable result
+        scp ssl.patch xavier@${result}:/home/xavier #On envoie le fichier de patch par ssh dans /home/xavier
+        mv /home/xavier/ #On envoie le patch dans le bon répertoire
+        sudo su #Privilèges root
 
-        version=$(cat /etc/*-release | grep "^NAME" | grep -oi "ubuntu" || grep -oi "debian" || grep -oi "centos" || grep -oi "redhat" || grep -oi "macos" |$
+        #on envoie la commande /etc/*release pour connaitre la version de la distribution installée. On stocke le résultat dans version
+        version=$(cat /etc/*-release | grep "^NAME" | grep -oi "ubuntu" || grep -oi "debian" || grep -oi "centos" || grep -oi "redhat" || grep -oi "macos" || grep -io "alpine" || grep -io "fedora"  )
 
+        #En fontion de la distribution on envoie telles ou telles commandes
         case $version in  "ubuntu" | "debian")
-        apt-get update && apt-get upgrade -y
-        apt-get install python-openssl -y
+        apt-get update && apt-get upgrade -y #update & upgrade de tous les paquets présents sur la machine
+        apt-get install python-openssl -y #installation de python-openssl
         ;;
 
         "centos" | "redhat" | "fedora" | "macos")
