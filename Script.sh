@@ -28,13 +28,12 @@ do
         # On filtre les IPs
         result=$(echo $tmp | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}')
 
-        #On envoie le fichier de patch par ssh dans /home/xavier
-        scp ssl.patch admin@${result}:/home/xavier #On envoie le fichier de patch par ssh dans /home/xavier
-
+        #On envoie le fichier de patch par ssh dans /home/admin
+        scp ssl.patch admin@${result}:/home/admin #On envoie le fichier de patch par ssh dans /home/admin
         ssh -t admin@${result} bash -c "' 
 
         #On se connecte par ssh à chaque ip dans la variable result
-       
+
         #on renome le fichier
         sudo mv ssl.patch ssl.py -y
 
