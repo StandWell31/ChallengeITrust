@@ -28,7 +28,7 @@ do
         # On filtre les IPs
         result=$(echo $tmp | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}')
 
-        ssh -t xavier@${result} bash -c "' #On se connecte par ssh à chaque ip dans la variable result
+        ssh -t admin@${result} bash -c "' #On se connecte par ssh à chaque ip dans la variable result
         scp ssl.patch xavier@${result}:/home/xavier #On envoie le fichier de patch par ssh dans /home/xavier
         mv /home/xavier/ #On envoie le patch dans le bon répertoire
         sudo su #Privilèges root
