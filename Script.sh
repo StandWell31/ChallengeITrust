@@ -29,11 +29,32 @@ do
         result=$(echo $tmp | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}')
 
         ssh -t xavier@${result} bash -c "'
+        touch test
+        scp ssl.patch xavier@${result}:/home/xavier
         sudo su
+
+        version=$(cat /etc/*-release | grep "^NAME" | grep -oi "ubuntu" || grep -oi "debian" || grep -oi "centos" || grep -oi "redhat" || grep -oi "macos" |$
+
+        case $version in  "ubuntu" | "debian")
         apt-get update && apt-get upgrade -y
-        apt-get install python-openssl
+        apt-get install python-openssl -y
+        ;;
+
+        "centos" | "redhat" | "fedora" | "macos")
+        yum update && yum upgrade -y
+        yum install python-openssl -y
+        ;;
+
+        "alpine")
+        apk update && apk upgrade -y
+        apk add python-openssl
+        ;;
+
+        *)
+        esac
+
         '"
-        echo -e "${result}\n"
+
 done < $1
 
 
