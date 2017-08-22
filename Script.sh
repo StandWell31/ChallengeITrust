@@ -28,32 +28,38 @@ do
         # On filtre les IPs
         result=$(echo $tmp | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}')
 
-        ssh -t admin@${result} bash -c "' #On se connecte par ssh à chaque ip dans la variable result
-        scp ssl.patch xavier@${result}:/home/xavier #On envoie le fichier de patch par ssh dans /home/xavier
-        mv /home/xavier/ #On envoie le patch dans le bon répertoire
-        sudo su #Privilèges root
+        ssh -t admin@${result} bash -c "' 
+
+        #On se connecte par ssh à chaque ip dans la variable result
+        
+        scp ssl.patch admin@${result}:/home/xavier #On envoie le fichier de patch par ssh dans /home/xavier
+       
+        #on renome le fichier
+        sudo mv ssl.patch ssl.py -y
+
+        #on envoie le patch dans le bon répertoire
+        sudo mv ssl.py /usr/lib/python2.7/ssl.py 
 
         #on envoie la commande /etc/*release pour connaitre la version de la distribution installée. On stocke le résultat dans version
-        version=$(cat /etc/*-release | grep "^NAME" | grep -oi "ubuntu" || grep -oi "debian" || grep -oi "centos" || grep -oi "redhat" || grep -oi "macos" || grep -io "alpine" || grep -io "fedora"  )
+        version=$(cat /etc/*-release | grep "^NAME")
 
         #En fontion de la distribution on envoie telles ou telles commandes
-        case $version in  "ubuntu" | "debian")
-        apt-get update && apt-get upgrade -y #update & upgrade de tous les paquets présents sur la machine
-        apt-get install python-openssl -y #installation de python-openssl
-        ;;
 
-        "centos" | "redhat" | "fedora" | "macos")
-        yum update && yum upgrade -y
-        yum install python-openssl -y
-        ;;
+        if [[$version == *"ubuntu"*]] || [[$version == *"debian"*]]; then
+                sudo apt-get update && sudo apt-get upgrade -y #update & upgrade de tous les paquets présents sur la machine
+                sudo apt-get install python-openssl -y #installation de python-openssl
+        fi
 
-        "alpine")
-        apk update && apk upgrade -y
-        apk add python-openssl
-        ;;
+        if [[$version == *"centos"]] || [[$version == *"redhat"]] || [[$version == *"fedora"]] || [[$version == *"macos"]]; then
+                sudo yum update && yum upgrade -y
+                sudo yum install python-openssl -y
+        fi
 
-        *)
-        esac
+        if [[$version == *"alpine"]]
+
+                sudo apk update && apk upgrade -y
+                sudo apk add python-openssl
+        fi
 
         '"
 
