@@ -4,6 +4,8 @@ OS Server : Debian 9.1.0
 
 Syntaxe : ./ITrust.save [nomdutableau]
 
+Le fichier csv ainsi que le patch doivent être dans le même répertoire que le script.
+
 Fonctionnel : 
 
 - Parse du tableau CSV 
