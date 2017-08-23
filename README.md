@@ -15,5 +15,6 @@ Fonctionnel :
 Non fonctionnel : 
 
 - Problème de privilèges pour lancer les commandes sur la machine client (Module PAM ?)
+- Sortie erreurs uniquement dans le fichier errors et non à l'écran
 
 Copyright (C) 2017 Xavier Greco - All Rights Reserved
